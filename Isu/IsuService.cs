@@ -11,15 +11,19 @@ namespace Isu
 
         public bool CheckCourse(string groupName, CourseNumber courseNumber)
         {
-            string course = groupName;
-            if ((int)course[2] == (int)courseNumber)
-                return true;
+            if (groupName != null)
+            {
+                string course = groupName;
+                if ((int)course[2] == (int)courseNumber)
+                    return true;
+            }
+
             return false;
         }
 
         public Student AddStudent(string name, Group group)
         {
-            var newStudent = new Student(name, IdMaker.MakeId(), group);
+            var newStudent = new Student(name, group);
             group.StudentsInGroup.Add(newStudent);
             allStudents.Add(newStudent);
             return newStudent;
@@ -68,7 +72,7 @@ namespace Isu
 
         public void ChangeStudentGroup(Student student, Group newGroup)
         {
-            var newStudent = new Student(student.Name, student.Id, newGroup);
+            var newStudent = new Student(student.Name, newGroup);
             allStudents.Add(newStudent);
             allStudents.Remove(student);
             student.Group.StudentsInGroup.Remove(student);
