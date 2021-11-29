@@ -11,10 +11,9 @@ namespace Isu
 
         public bool CheckCourse(string groupName, CourseNumber courseNumber)
         {
-            if (groupName != null)
+            if (groupName != null && groupName.Length == 5)
             {
-                string course = groupName;
-                if ((int)course[2] == (int)courseNumber)
+                if ((int)(groupName[2] - '0') == (int)courseNumber)
                     return true;
             }
 
