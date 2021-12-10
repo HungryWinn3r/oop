@@ -36,7 +36,7 @@ namespace Shops
 
         public Person AddCustomer(string name, int money)
         {
-            var newCustomer = new Person(name, money, IdMaker.MakeId());
+            var newCustomer = new Person(name, money);
             allCustomers.Add(newCustomer);
             return newCustomer;
         }
@@ -86,7 +86,7 @@ namespace Shops
 
                 if (foundedProduct.Count < product.Count)
                 {
-                    break;
+                    return int.MaxValue;
                 }
 
                 sum += product.Count * foundedProduct.Price;
@@ -117,6 +117,7 @@ namespace Shops
         public void BuyProducts(Person person, Shop shop, int count, List<Product> products)
         {
             int sum = 0;
+            List<Product> products1 = allProducts;
 
             foreach (Product product in products)
             {
@@ -130,13 +131,14 @@ namespace Shops
                 {
                     sum += productInShop.Price * count;
                     Product newProduct = productInShop.ToBuilder().WithCount(productInShop.Count - count).Build();
-                    allProducts.Remove(productInShop);
-                    allProducts.Add(newProduct);
+                    products1.Remove(productInShop);
+                    products1.Add(newProduct);
                 }
             }
 
             if (person.Money >= sum)
             {
+                allProducts = products1;
                 Person newPerson = person.ToBuilder().WithMoney(person.Money - sum).Build();
                 allCustomers.Remove(person);
                 allCustomers.Add(newPerson);

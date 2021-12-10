@@ -12,7 +12,6 @@ namespace Shops.Tests
         [SetUp]
         public void Setup()
         {
-            _shopManager = null;
             _shopManager = new ShopManager();
         }
 

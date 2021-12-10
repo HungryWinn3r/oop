@@ -2,11 +2,11 @@
 {
     public class Person
     {
-        public Person(string name, int money, int id)
+        public Person(string name, int money)
         {
             Name = name;
             Money = money;
-            Id = id;
+            Id = IdMaker.MakeId();
         }
 
         public string Name { get; }
@@ -50,7 +50,7 @@
 
             public Person Build()
             {
-                var finalPerson = new Person(_name, _money, _id);
+                var finalPerson = new Person(_name, _money);
                 return finalPerson;
             }
         }
