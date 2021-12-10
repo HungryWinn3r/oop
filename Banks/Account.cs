@@ -11,18 +11,16 @@ namespace Banks
             MaxCredit = limit;
             AccBank = bank;
             Id = IdMaker.MakeId();
-            LastTrans = 0;
+            Limit = bank.LimitForTrans;
         }
 
-        public Account(Client client, DateTime dateTime, Bank bank, float percent, float curMoney)
+        public Account(Client client, DateTime dateTime, Bank bank, float curMoney)
         {
             Owner = client;
             Money = curMoney;
             Date = dateTime;
             AccBank = bank;
-            PercentPerDay = percent / 365;
             Id = IdMaker.MakeId();
-            LastTrans = 0;
         }
 
         public Account(Client client, Bank bank, float curMoney)
@@ -31,18 +29,14 @@ namespace Banks
             Money = curMoney;
             AccBank = bank;
             Id = IdMaker.MakeId();
-            LastTrans = 0;
+            Limit = bank.LimitForTrans;
         }
+
+        public float Limit { get; }
 
         public float MaxCredit { get; }
 
-        public float LastTrans { get; set; }
-
         public int Id { get; }
-
-        public float PercentPerDay { get; }
-
-        public float Percent { get; }
 
         public Bank AccBank { get; }
 
@@ -61,7 +55,6 @@ namespace Banks
             accountBuilder.WithCredit(Credit);
             accountBuilder.WithAccBank(AccBank);
             accountBuilder.WithDate(Date);
-            accountBuilder.WithPercent(Percent);
             accountBuilder.WithMoney(Money);
             return accountBuilder;
         }
@@ -72,7 +65,6 @@ namespace Banks
             private float _credit;
             private Bank _accBank;
             private DateTime _date;
-            private float _percent;
             private float _money;
 
             public AccountBuilder WithOwner(Client owner)
@@ -99,12 +91,6 @@ namespace Banks
                 return this;
             }
 
-            public AccountBuilder WithPercent(float percent)
-            {
-                _percent = percent;
-                return this;
-            }
-
             public AccountBuilder WithMoney(float money)
             {
                 _money = money;
@@ -125,7 +111,7 @@ namespace Banks
 
             public Account BuildDepositAcc()
             {
-                var finalDepositAcc = new Account(_owner, _date, _accBank, _percent, _money);
+                var finalDepositAcc = new Account(_owner, _date, _accBank, _money);
                 return finalDepositAcc;
             }
         }
