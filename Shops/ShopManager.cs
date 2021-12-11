@@ -81,7 +81,7 @@ namespace Shops
                 Product foundedProduct = FindProducts(shop).Find(obj => obj.Name == product.Name);
                 if (foundedProduct == null)
                 {
-                    throw new Exception("not found");
+                    return int.MaxValue;
                 }
 
                 if (foundedProduct.Count < product.Count)
