@@ -4,20 +4,20 @@ namespace Isu
 {
     public class Student
     {
-        public Student(string name, int id, Group group, string fac)
+        public Student(string name, Group group, string faculty)
         {
             if (group.StudentsInGroup.Count >= group.Limit)
                 throw new IsuException("Group is full");
             Name = name;
-            Id = id;
+            Id = IdMaker.MakeId();
             Group = group;
-            Fac = fac;
-            Timetable = new int[6, 8];
+            Faculty = faculty;
+            OgnpCount = 0;
         }
 
-        public int[,] Timetable { get; }
+        public int OgnpCount { get; set; }
 
-        public string Fac { get; }
+        public string Faculty { get; }
 
         public string Name { get; }
 

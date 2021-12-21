@@ -9,28 +9,24 @@ namespace Isu
         public static readonly List<Student> AllStudentsWithoutOgnp = new List<Student>(IsuService.AllStudents);
         public static readonly List<Stream> AllStreams = new List<Stream>();
 
-        public Lesson AddLesson(int date, int time, string teacher, int classroom, Group ognpGroup)
+        public Lesson AddLesson(int date, DateTime time, string teacher, int classroom, Group ognpGroup)
         {
-            var newLesson = new Lesson(date, time, teacher, classroom, ognpGroup);
-            return newLesson;
+            return new Lesson(date, time, teacher, classroom, ognpGroup);
         }
 
-        public Lesson AddLesson(int date, int time, string teacher, int classroom)
+        public Lesson AddLesson(int date, DateTime time, string teacher, int classroom)
         {
-            var newLesson = new Lesson(date, time, teacher, classroom);
-            return newLesson;
+            return new Lesson(date, time, teacher, classroom);
         }
 
-        public Ognp AddOgnp(string name, string fac)
+        public Ognp AddOgnp(string name, string faculty)
         {
-            var newOgnp = new Ognp(name, fac);
-            return newOgnp;
+            return new Ognp(name, faculty);
         }
 
         public Stream AddStream(string name, int limit)
         {
-            var newStream = new Stream(name, limit);
-            return newStream;
+            return new Stream(name, limit);
         }
 
         public void AddStreamToOgnp(Ognp ognp, Stream stream)
@@ -38,28 +34,35 @@ namespace Isu
             ognp.StreamsAtOgnp.Add(stream);
         }
 
-        public void AddStudentToLesson(Lesson lesson, Student student)
+        public void AddStudentToLessons(Student student, List<Lesson> lessons)
         {
-            lesson.StudentsAtLesson.Add(student);
-            if (student.Timetable[lesson.Date, lesson.Time] != 1)
+            foreach (Lesson lesson in lessons)
             {
-                student.Timetable[lesson.Date, lesson.Time] = 1;
-            }
-            else if (student.Timetable[lesson.Date, lesson.Time] == 1)
-            {
-                throw new Exception("bad time");
+                foreach (Lesson lesson1 in lessons)
+                {
+                    if (lesson.Time != lesson1.Time)
+                    {
+                        throw new Exception("bad time!");
+                    }
+                }
             }
         }
 
         public void AddStudentToOgnp(Ognp ognp, Stream stream, Student student)
         {
-            if (ognp.Fac == student.Fac)
-                throw new Exception("same fac");
+            if (ognp.Faculty == student.Faculty)
+                throw new Exception("same faculty");
+
+            if (student.OgnpCount == 2)
+            {
+                throw new Exception("already two ognp chosen");
+            }
 
             if (stream.StudentsAtStream.Count < stream.Limit)
             {
                 stream.StudentsAtStream.Add(student);
                 AllStudentsWithoutOgnp.Remove(student);
+                student.OgnpCount += 1;
             }
             else
             {

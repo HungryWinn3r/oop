@@ -4,16 +4,16 @@ namespace Isu
 {
     public class Ognp
     {
-        public Ognp(string name, string fac)
+        public Ognp(string name, string faculty)
         {
             Name = name;
-            Fac = fac;
+            Faculty = faculty;
             StreamsAtOgnp = new List<Stream>();
         }
 
         public string Name { get; }
 
-        public string Fac { get; }
+        public string Faculty { get; }
 
         public List<Stream> StreamsAtOgnp { get; }
     }
