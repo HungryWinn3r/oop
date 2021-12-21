@@ -16,6 +16,6 @@ namespace Shops.Services
         List<Product> FindProducts(Shop shop);
         int CalculatePriceAtShop(Shop shop, List<Product> products);
         int FindCheapest(List<Product> products);
-        void BuyProducts(Person person, Shop shop, int count, List<Product> products);
+        void BuyProducts(Person person, Shop shop, List<Product> products);
     }
 }

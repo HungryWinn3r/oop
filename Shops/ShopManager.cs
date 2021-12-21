@@ -114,7 +114,7 @@ namespace Shops
             return cheapestShopId;
         }
 
-        public void BuyProducts(Person person, Shop shop, int count, List<Product> products)
+        public void BuyProducts(Person person, Shop shop, List<Product> products)
         {
             int sum = 0;
             List<Product> products1 = allProducts;
@@ -127,10 +127,10 @@ namespace Shops
                     throw new Exception("not found");
                 }
 
-                if (productInShop.Count >= count)
+                if (productInShop.Count >= product.Count)
                 {
-                    sum += productInShop.Price * count;
-                    Product newProduct = productInShop.ToBuilder().WithCount(productInShop.Count - count).Build();
+                    sum += productInShop.Price * product.Count;
+                    Product newProduct = productInShop.ToBuilder().WithCount(productInShop.Count - product.Count).Build();
                     products1.Remove(productInShop);
                     products1.Add(newProduct);
                 }

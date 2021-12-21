@@ -74,8 +74,13 @@ namespace Shops.Tests
             _shopManager.ChangeThePrice(_shopManager.FindProductByNameAndShop(product.Name, shop.Id), 20);
             _shopManager.ChangeThePrice(_shopManager.FindProductByNameAndShop(product1.Name, shop.Id), 50);
             Person person = _shopManager.AddCustomer("Person", 12345);
-            _shopManager.BuyProducts(person, shop, 3, list);
-            int expectedPersonMoney = 12345 - 3 * 20 - 3 * 50;
+            Product product2 = _shopManager.AddProduct("apple", 2);
+            Product product3 = _shopManager.AddProduct("orange", 2);
+            var list1 = new List<Product>();
+            list1.Add(product2);
+            list1.Add(product3);
+            _shopManager.BuyProducts(person, shop, list1);
+            int expectedPersonMoney = 12345 - 2 * 20 - 2 * 50;
             Assert.AreEqual(expectedPersonMoney, _shopManager.FindCustomer("Person").Money);
         }
     }
