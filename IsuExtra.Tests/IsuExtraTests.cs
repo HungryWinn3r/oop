@@ -21,10 +21,10 @@ namespace IsuExtra.Tests
         [Test]
         public void AddStudentToOgnp_StreamContainsStudent()
         {
-            Group group = isuService.AddGroup("B12", 30);
-            Student student = isuService.AddStudent("StudentName", group, "btins");
+            Group group = isuService.AddGroup("M3201", 30);
+            Student student = isuService.AddStudent("StudentName", group, "tint");
             Stream stream = isuExtra.AddStream("b13", 200);
-            Ognp ognp = isuExtra.AddOgnp("FI", "tint");
+            Ognp ognp = isuExtra.AddOgnp("FI", "btins");
             isuExtra.AddStreamToOgnp(ognp, stream);
             isuExtra.AddStudentToOgnp(ognp, stream, student);
             Assert.Contains(student, stream.StudentsAtStream);
@@ -33,7 +33,7 @@ namespace IsuExtra.Tests
         [Test]
         public void StudentAndOgnpSameFac_ThrowExeption()
         {
-            Group group = isuService.AddGroup("B12", 30);
+            Group group = isuService.AddGroup("M3204", 30);
             Student student = isuService.AddStudent("StudentName", group, "tint");
             Stream stream = isuExtra.AddStream("b13", 200);
             Ognp ognp = isuExtra.AddOgnp("FI", "tint");

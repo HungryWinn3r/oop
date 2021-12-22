@@ -40,7 +40,7 @@ namespace Isu
             {
                 foreach (Lesson lesson1 in lessons)
                 {
-                    if (lesson.Time != lesson1.Time)
+                    if (lesson.Time == lesson1.Time)
                     {
                         throw new Exception("bad time!");
                     }
@@ -74,6 +74,7 @@ namespace Isu
         {
             AllStudentsWithoutOgnp.Add(student);
             stream.StudentsAtStream.Remove(student);
+            student.OgnpCount -= 1;
         }
 
         public List<Stream> FindStreams(CourseNumber courseNumber)
