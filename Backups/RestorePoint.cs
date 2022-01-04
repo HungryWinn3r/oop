@@ -6,9 +6,9 @@ namespace Backups
 {
     public class RestorePoint
     {
-        public RestorePoint(DateTime dateTime)
+        public RestorePoint()
         {
-            CreatedTime = dateTime;
+            CreatedTime = DateTime.Now;
             Id = IdMaker.MakeId();
             ListOfFiles = new List<int>();
         }

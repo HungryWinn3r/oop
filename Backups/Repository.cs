@@ -20,14 +20,26 @@ namespace Backups
             newDirectory.Create();
         }
 
-        public string Compress(string file, string path)
+        public string Compress(string filePath)
         {
-            using var sourceStream = new FileStream(file, FileMode.OpenOrCreate);
+            using var sourceStream = new FileStream(filePath, FileMode.OpenOrCreate);
 
-            using FileStream targetStream = File.Create(path);
+            using FileStream targetStream = File.Create(filePath);
 
             using var compressionStream = new GZipStream(targetStream, CompressionMode.Compress);
             sourceStream.CopyTo(compressionStream);
+            return filePath;
+        }
+
+        public string Archive(List<string> files, string path)
+        {
+            DirectoryInfo dirInfo = Directory.CreateDirectory(tmpDirPath)
+            foreach (string file in files)
+            {
+                File.Copy(file, newDirectory.FullName);
+            }
+
+            Compress(path);
             return path;
         }
 
@@ -40,14 +52,6 @@ namespace Backups
             using var decompressionStream = new GZipStream(sourceStream, CompressionMode.Decompress);
             decompressionStream.CopyTo(targetStream);
             return targetFile;
-        }
-
-        public string Archive(List<string> files, string path)
-        {
-            foreach (string file in files)
-            {
-
-            }
         }
     }
 }
