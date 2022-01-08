@@ -83,5 +83,21 @@ namespace Shops.Tests
             int expectedPersonMoney = 12345 - 2 * 20 - 2 * 50;
             Assert.AreEqual(expectedPersonMoney, _shopManager.FindCustomer("Person").Money);
         }
+
+        [Test]
+        public void BuyProductsCustomerDsntHaveEnoughMoney_ProductsNotRemoved()
+        {
+            Shop shop = _shopManager.AddShop("shop", "address");
+            Product product = _shopManager.AddProduct("apple", 10);
+            var list = new List<Product>();
+            list.Add(product);
+            _shopManager.AddProductsToShop(shop, list);
+            _shopManager.ChangeThePrice(_shopManager.FindProductByNameAndShop(product.Name, shop.Id), 20);
+            Person person = _shopManager.AddCustomer("Person", 10);
+            var list1 = new List<Product>();
+            _shopManager.BuyProducts(person, shop, list1);
+            int expetedProductCount = 10;
+            Assert.AreEqual(expetedProductCount, product.Count);
+        }
     }
 }

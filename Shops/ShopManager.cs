@@ -117,7 +117,7 @@ namespace Shops
         public void BuyProducts(Person person, Shop shop, List<Product> products)
         {
             int sum = 0;
-            List<Product> products1 = allProducts;
+            List<Product> productsIfEnoughMoney = allProducts;
 
             foreach (Product product in products)
             {
@@ -131,14 +131,14 @@ namespace Shops
                 {
                     sum += productInShop.Price * product.Count;
                     Product newProduct = productInShop.ToBuilder().WithCount(productInShop.Count - product.Count).Build();
-                    products1.Remove(productInShop);
-                    products1.Add(newProduct);
+                    productsIfEnoughMoney.Remove(productInShop);
+                    productsIfEnoughMoney.Add(newProduct);
                 }
             }
 
             if (person.Money >= sum)
             {
-                allProducts = products1;
+                allProducts = productsIfEnoughMoney;
                 Person newPerson = person.ToBuilder().WithMoney(person.Money - sum).Build();
                 allCustomers.Remove(person);
                 allCustomers.Add(newPerson);
