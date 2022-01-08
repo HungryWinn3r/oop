@@ -117,7 +117,7 @@ namespace Shops
         public void BuyProducts(Person person, Shop shop, List<Product> products)
         {
             int sum = 0;
-            List<Product> productsIfEnoughMoney = allProducts;
+            var productsIfEnoughMoney = new List<Product>(allProducts);
 
             foreach (Product product in products)
             {
