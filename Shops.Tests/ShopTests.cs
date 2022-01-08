@@ -94,8 +94,7 @@ namespace Shops.Tests
             _shopManager.AddProductsToShop(shop, list);
             _shopManager.ChangeThePrice(_shopManager.FindProductByNameAndShop(product.Name, shop.Id), 20);
             Person person = _shopManager.AddCustomer("Person", 10);
-            var list1 = new List<Product>();
-            _shopManager.BuyProducts(person, shop, list1);
+            _shopManager.BuyProducts(person, shop, list);
             int expetedProductCount = 10;
             Assert.AreEqual(expetedProductCount, product.Count);
         }
