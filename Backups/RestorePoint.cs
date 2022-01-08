@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Backups
 {
     public class RestorePoint
     {
-        public RestorePoint(DateTime dateTime)
+        public RestorePoint(string name, DateTime dateCreation)
         {
-            CreatedTime = dateTime;
-            Id = IdMaker.MakeId();
-            ListOfFiles = new List<int>();
+            DateCreation = dateCreation;
+            Name = name;
         }
 
-        public DateTime CreatedTime { get; }
-
-        public int Id { get; }
-
-        public List<int> ListOfFiles { get; }
+        public DateTime DateCreation { get; }
+        public List<string> Files { get; private set; } = new List<string>();
+        public string Name { get; }
     }
 }
