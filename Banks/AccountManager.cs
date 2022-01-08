@@ -53,15 +53,14 @@ namespace Banks
 
         public void TakeMoneyFromDepositAcc(Account account, int money, DateTime date)
         {
-            if (account.Owner.Level < 3)
+            if (account.Owner.Address == null && account.Owner.Passport == null)
             {
                 if (account.Money >= money && date >= account.Date && account.AccBank.LimitForTrans <= money)
                 {
                     account.ToBuilder().WithMoney(account.Money - money).BuildDepositAcc();
                 }
             }
-
-            if (account.Owner.Level >= 3)
+            else
             {
                 if (account.Money >= money && date >= account.Date)
                 {
@@ -72,15 +71,14 @@ namespace Banks
 
         public void TakeMoneyFromDebitAcc(Account account, int money)
         {
-            if (account.Owner.Level < 3)
+            if (account.Owner.Address == null && account.Owner.Passport == null)
             {
                 if (account.Money >= money && account.AccBank.LimitForTrans <= money)
                 {
                     account.ToBuilder().WithMoney(account.Money - money).BuildDebitAcc();
                 }
             }
-
-            if (account.Owner.Level >= 3)
+            else
             {
                 if (account.Money >= money)
                 {
@@ -91,15 +89,14 @@ namespace Banks
 
         public void TakeMoneyFromCreditAcc(Account account, int money)
         {
-            if (account.Owner.Level < 3)
+            if (account.Owner.Address == null && account.Owner.Passport == null)
             {
                 if (account.Credit >= money && account.AccBank.LimitForTrans <= money)
                 {
                     account.ToBuilder().WithMoney(account.Credit - money).BuildDebitAcc();
                 }
             }
-
-            if (account.Owner.Level >= 3)
+            else
             {
                 if (account.Credit >= money)
                 {

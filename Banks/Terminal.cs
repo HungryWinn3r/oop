@@ -7,7 +7,6 @@ namespace Banks
         public void Cmd(Client client)
         {
             Console.WriteLine("Client-Address/Passport");
-            Console.WriteLine("ShowClientLevel");
 
             if (Console.ReadLine() == "Client")
             {
@@ -18,13 +17,8 @@ namespace Banks
 
                 if (Console.ReadLine() == "Passport")
                 {
-                    ChangePassportClient(client, Convert.ToInt32(Console.ReadLine()));
+                    ChangePassportClient(client, Console.ReadLine());
                 }
-            }
-
-            if (Console.ReadLine() == "ShowClientLevel")
-            {
-                Console.WriteLine($"current level = {client.Level}");
             }
         }
     }

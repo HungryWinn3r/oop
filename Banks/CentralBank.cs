@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Banks
 {
     public class CentralBank : ICentralBank
     {
-        private readonly List<Account> accFrom = new List<Account>();
-        private readonly List<Account> accTo = new List<Account>();
-        private readonly List<float> transferStory = new List<float>();
+        private readonly TransferStory transferStory = new TransferStory();
 
         public Bank AddBank(int percentForDebit, int percentForDeposit, int commission, float limitForTrans)
         {
@@ -15,43 +12,42 @@ namespace Banks
             return newBank;
         }
 
-        public void TransferMoney(Account account, Account account1, int moneyToTransfer) // кому-откуда
+        public void TransferMoney(Account recipientAccount, Account senderAccount, int moneyToTransfer) // кому-откуда
         {
-            if (account.Owner.Level < 3)
+            if (senderAccount.Owner.Address == null && senderAccount.Owner.Passport == null)
             {
-                if (account1.Money >= moneyToTransfer && account1.AccBank.LimitForTrans <= moneyToTransfer)
+                if (senderAccount.Money >= moneyToTransfer && senderAccount.AccBank.LimitForTrans <= moneyToTransfer)
                 {
-                    account.ToBuilder().WithMoney(account.Money + moneyToTransfer).BuildDebitAcc();
-                    account1.ToBuilder().WithMoney(account1.Money - moneyToTransfer).BuildDebitAcc();
-                    accTo.Add(account);
-                    accFrom.Add(account1);
-                    transferStory.Add(moneyToTransfer);
+                    recipientAccount.ToBuilder().WithMoney(recipientAccount.Money + moneyToTransfer).BuildDebitAcc();
+                    senderAccount.ToBuilder().WithMoney(senderAccount.Money - moneyToTransfer).BuildDebitAcc();
+                    transferStory.Recipients.Add(recipientAccount);
+                    transferStory.Senders.Add(senderAccount);
+                    transferStory.TransactionAmount.Add(moneyToTransfer);
                 }
             }
-
-            if (account.Owner.Level >= 3)
+            else
             {
-                if (account1.Money >= moneyToTransfer)
+                if (senderAccount.Money >= moneyToTransfer)
                 {
-                    account.ToBuilder().WithMoney(account.Money + moneyToTransfer).BuildDebitAcc();
-                    account1.ToBuilder().WithMoney(account1.Money - moneyToTransfer).BuildDebitAcc();
-                    accTo.Add(account);
-                    accFrom.Add(account1);
-                    transferStory.Add(moneyToTransfer);
+                    recipientAccount.ToBuilder().WithMoney(recipientAccount.Money + moneyToTransfer).BuildDebitAcc();
+                    senderAccount.ToBuilder().WithMoney(senderAccount.Money - moneyToTransfer).BuildDebitAcc();
+                    transferStory.Recipients.Add(recipientAccount);
+                    transferStory.Senders.Add(senderAccount);
+                    transferStory.TransactionAmount.Add(moneyToTransfer);
                 }
             }
         }
 
-        public void MoneyBack(Account account, Account account1) // откуда-куда
+        public void MoneyBack(Account senderAccount, Account recipientAccount) // откуда-куда
         {
-            foreach (Account acc in accFrom)
+            foreach (Account accSender in transferStory.Senders)
             {
-                foreach (Account acc1 in accTo)
+                foreach (Account accRecipient in transferStory.Recipients)
                 {
-                    if (account1.Id == acc.Id && account.Id == acc1.Id)
+                    if (recipientAccount.Id == accSender.Id && senderAccount.Id == accRecipient.Id)
                     {
-                        account.ToBuilder().WithMoney(account.Money - transferStory[account.Id]).BuildDebitAcc();
-                        account1.ToBuilder().WithMoney(account1.Money + transferStory[account.Id]).BuildDebitAcc();
+                        senderAccount.ToBuilder().WithMoney(senderAccount.Money - transferStory.TransactionAmount[senderAccount.Id]).BuildDebitAcc();
+                        recipientAccount.ToBuilder().WithMoney(recipientAccount.Money + transferStory.TransactionAmount[senderAccount.Id]).BuildDebitAcc();
                     }
                 }
             }

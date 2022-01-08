@@ -2,11 +2,8 @@
 {
     public interface IClient
     {
-        public Client AddClient(string name, string surname, string address, int passport);
-        public Client AddClient(string name, string surname);
-        public Client AddClient(string name, string surname, string address);
-        public Client AddClient(string name, string surname, int passport);
-        public void ChangeAddressClient(Client client, string address);
-        public void ChangePassportClient(Client client, int passport);
+        Client AddClient(string name, string surname, string address, string passport);
+        void ChangeAddressClient(Client client, string address);
+        void ChangePassportClient(Client client, string passport);
     }
 }
