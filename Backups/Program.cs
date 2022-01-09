@@ -9,9 +9,7 @@ namespace Backups
             var factory = new SimpleAlgorithmFactory(new LocalFileRepository("C:"));
             Algorithm algorithm;
 
-            Console.WriteLine("Which algorithm do you want to use ?: ");
-            string ans = Console.ReadLine();
-            algorithm = factory.CreateAlgorithm(ans);
+            algorithm = factory.CreateAlgorithm(AlgorithmType.SINGLE);
 
             var backupJob = new BackupJob("Backup2022_2", algorithm);
             backupJob.AddFile("C:\\MyPhoto\\photo1.txt");

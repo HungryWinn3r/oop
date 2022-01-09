@@ -27,7 +27,7 @@ namespace Backups
         public void DeleteFile(string path)
         {
             if (!JobObjects.Contains(path))
-                throw new Exception("There is no such file");
+                throw new BackupException("There is no such file");
 
             JobObjects.Remove(path);
         }

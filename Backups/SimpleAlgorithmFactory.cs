@@ -9,14 +9,19 @@
             _repository = repository;
         }
 
-        public Algorithm CreateAlgorithm(string type)
+        public Algorithm CreateAlgorithm(AlgorithmType type)
         {
             Algorithm algorithm = null;
-            type = type.ToLower();
-            if (type == "split" || type == "split storages")
-                algorithm = new SplitStorageAlgorithm(_repository);
-            else if (type == "single" || type == "single storage")
-                algorithm = new SingleStorageAlgorithm(_repository);
+
+            switch (type)
+            {
+                case AlgorithmType.SPLIT:
+                    algorithm = new SplitStorageAlgorithm(_repository);
+                    break;
+                case AlgorithmType.SINGLE:
+                    algorithm = new SingleStorageAlgorithm(_repository);
+                    break;
+            }
 
             return algorithm;
         }

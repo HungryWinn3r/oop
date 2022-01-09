@@ -15,7 +15,7 @@ namespace Backups.Tests
         [Test]
         public void AddTwoJobs_Run_DeleteOneJob_Run_ResultTwoRestorePointsAndThreeStorages()
         {
-            Algorithm algorithm = factory.CreateAlgorithm("split");
+            Algorithm algorithm = factory.CreateAlgorithm(AlgorithmType.SPLIT);
             var backup = new BackupJob("Backup1", algorithm);
             backup.AddFile(@"C:\MyVideo\video1.txt");
             backup.AddFile(@"C:\MyPhoto\photo1.txt");
@@ -30,5 +30,22 @@ namespace Backups.Tests
             Assert.AreEqual(expectedStorage, backup.CountStorages());
         }
 
+        [Test]
+        public void ChooseSingleStorageAlgorithm_AddTwoJobs_Run_DeleteOneJob_Run_ResultTwoRestorePointAndTwoStorage()
+        {
+            Algorithm algorithm = factory.CreateAlgorithm(AlgorithmType.SINGLE);
+            var backup = new BackupJob("Backup2", algorithm);
+            backup.AddFile(@"C:\MyVideo\video1.txt");
+            backup.AddFile(@"C:\MyPhoto\photo1.txt");
+            backup.Backup();
+            backup.DeleteFile(@"C:\MyPhoto\photo1.txt");
+            backup.Backup();
+
+            int expectedRestorePoints = 2;
+            int expectedStorage = 2;
+
+            Assert.AreEqual(expectedRestorePoints, backup.RestorePoints.Count);
+            Assert.AreEqual(expectedStorage, backup.CountStorages());
+        }
     }
 }
