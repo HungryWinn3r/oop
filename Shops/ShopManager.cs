@@ -145,6 +145,7 @@ namespace Shops
             }
             else
             {
+                throw new Exception("not enough money");
             }
         }
     }
