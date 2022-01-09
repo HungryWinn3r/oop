@@ -7,17 +7,19 @@ namespace Backups
     {
         private Algorithm _algorithm;
         private IRepository _repository;
-        public BackupJob(string name, Algorithm algorithm)
+        public BackupJob(string name, Algorithm algorithm, int maxPointCount)
         {
             Name = name;
             _algorithm = algorithm;
             _repository = algorithm.Repository;
             _repository.CreateBackupDir(name);
+            MaxPointCount = maxPointCount;
         }
 
         public List<string> JobObjects { get; private set; } = new List<string>();
         public string Name { get; }
         public List<RestorePoint> RestorePoints { get; private set; } = new List<RestorePoint>();
+        public int MaxPointCount { get; }
 
         public void AddFile(string path)
         {
@@ -32,7 +34,7 @@ namespace Backups
             JobObjects.Remove(path);
         }
 
-        public void Backup()
+        public void Backup(BackupJob backup)
         {
             DateTime now = DateTime.Now;
             string restorePointName = $"RestorePoint{RestorePoints.Count}_{now.Day}.{now.Month}.{now.Year}";
@@ -40,6 +42,10 @@ namespace Backups
             RestorePoints.Add(restorePoint);
             _repository.CreateRestorePointDir(restorePoint.Name);
             _algorithm.Backup(this, restorePoint);
+            if (RestorePoints.Count > backup.MaxPointCount)
+            {
+                RestorePoints.RemoveAt(RestorePoints.Count - 1);
+            }
         }
 
         public int CountStorages()

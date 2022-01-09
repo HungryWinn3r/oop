@@ -12,7 +12,7 @@ namespace Backups
         }
 
         public DateTime DateCreation { get; }
-        public List<string> Files { get; private set; } = new List<string>();
+        public List<string> Files { get; set; } = new List<string>();
         public string Name { get; }
     }
 }
