@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Shops.Services;
+using System;
 using System.Collections.Generic;
 
 namespace Shops.Tests
@@ -82,6 +83,21 @@ namespace Shops.Tests
             _shopManager.BuyProducts(person, shop, list1);
             int expectedPersonMoney = 12345 - 2 * 20 - 2 * 50;
             Assert.AreEqual(expectedPersonMoney, _shopManager.FindCustomer("Person").Money);
+        }
+
+        [Test]
+        public void BuyProductsCustomerDsntHaveEnoughMoney_ProductsNotRemoved()
+        {
+            Shop shop = _shopManager.AddShop("shop", "address");
+            Product product = _shopManager.AddProduct("apple", 10);
+            var list = new List<Product>();
+            list.Add(product);
+            _shopManager.AddProductsToShop(shop, list);
+            _shopManager.ChangeThePrice(_shopManager.FindProductByNameAndShop(product.Name, shop.Id), 20);
+            Person person = _shopManager.AddCustomer("Person", 10);
+            int expetedProductCount = 10;
+            Assert.Catch<Exception>(() => _shopManager.BuyProducts(person, shop, list));
+            Assert.AreEqual(expetedProductCount, product.Count);
         }
     }
 }
