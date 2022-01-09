@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
@@ -13,7 +12,7 @@ namespace Backups
         public LocalFileRepository(string storage)
         {
             if (!Directory.Exists(storage))
-                throw new Exception("There is no such storage");
+                throw new BackupException("There is no such storage");
             _storage = storage;
         }
 
@@ -22,7 +21,7 @@ namespace Backups
             _pathToBackup = _storage + $@"\{backupName}";
             var directoryInfo = new DirectoryInfo(_pathToBackup);
             if (directoryInfo.Exists)
-                throw new Exception("This backup directory already created");
+                throw new BackupException("This backup directory already created");
             directoryInfo.Create();
         }
 
