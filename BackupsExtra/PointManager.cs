@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
-using Backups;
 
-namespace BackupsExtra
+namespace Backups
 {
     public class PointManager
     {
