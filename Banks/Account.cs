@@ -12,6 +12,7 @@ namespace Banks
             AccBank = bank;
             Id = IdMaker.MakeId();
             Limit = bank.LimitForTrans;
+            Verification = !(Owner.Address == null || Owner.Passport == null);
         }
 
         public Account(Client client, DateTime dateTime, Bank bank, float curMoney)
@@ -21,6 +22,7 @@ namespace Banks
             Date = dateTime;
             AccBank = bank;
             Id = IdMaker.MakeId();
+            Verification = !(Owner.Address == null || Owner.Passport == null);
         }
 
         public Account(Client client, Bank bank, float curMoney)
@@ -30,7 +32,10 @@ namespace Banks
             AccBank = bank;
             Id = IdMaker.MakeId();
             Limit = bank.LimitForTrans;
+            Verification = !(Owner.Address == null || Owner.Passport == null);
         }
+
+        public bool Verification { get; }
 
         public float Limit { get; }
 

@@ -53,7 +53,7 @@ namespace Banks
 
         public void TakeMoneyFromDepositAcc(Account account, int money, DateTime date)
         {
-            if (account.Owner.Address == null && account.Owner.Passport == null)
+            if (!account.Verification)
             {
                 if (account.Money >= money && date >= account.Date && account.AccBank.LimitForTrans <= money)
                 {
@@ -71,7 +71,7 @@ namespace Banks
 
         public void TakeMoneyFromDebitAcc(Account account, int money)
         {
-            if (account.Owner.Address == null && account.Owner.Passport == null)
+            if (!account.Verification)
             {
                 if (account.Money >= money && account.AccBank.LimitForTrans <= money)
                 {
@@ -89,7 +89,7 @@ namespace Banks
 
         public void TakeMoneyFromCreditAcc(Account account, int money)
         {
-            if (account.Owner.Address == null && account.Owner.Passport == null)
+            if (!account.Verification)
             {
                 if (account.Credit >= money && account.AccBank.LimitForTrans <= money)
                 {
