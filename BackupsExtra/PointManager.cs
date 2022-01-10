@@ -57,12 +57,18 @@ namespace Backups
 
         public void RestoreForOriginalLocation(RestorePoint restorePoint)
         {
-            Decompress(restorePoint.Name, restorePoint.Name);
+            foreach (string file in restorePoint.Files)
+            {
+                Decompress(file, file);
+            }
         }
 
         public void RestoreForDifferentLocation(RestorePoint restorePoint, string tragetFilePath)
         {
-            Decompress(restorePoint.Name, tragetFilePath);
+            foreach (string file in restorePoint.Files)
+            {
+                Decompress(file, tragetFilePath);
+            }
         }
     }
 }
