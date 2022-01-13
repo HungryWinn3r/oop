@@ -13,8 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IsuExtra\IsuExtra.csproj" />
-    <ProjectReference Include="..\Isu\Isu.csproj" />
+    <ProjectReference Include="..\Shops\Shops.csproj" />
   </ItemGroup>
 
 </Project>
