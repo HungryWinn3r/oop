@@ -6,19 +6,20 @@ namespace Backups
 {
     public class LocalFileRepository : IRepository
     {
-        private string _storage;
         private string _pathToBackup;
 
         public LocalFileRepository(string storage)
         {
             if (!Directory.Exists(storage))
                 throw new BackupException("There is no such storage");
-            _storage = storage;
+            Storage = storage;
         }
+
+        public string Storage { get; }
 
         public void CreateBackupDir(string backupName)
         {
-            _pathToBackup = _storage + $@"\{backupName}";
+            _pathToBackup = Storage + $@"\{backupName}";
             var directoryInfo = new DirectoryInfo(_pathToBackup);
             if (directoryInfo.Exists)
                 throw new BackupException("This backup directory already created");

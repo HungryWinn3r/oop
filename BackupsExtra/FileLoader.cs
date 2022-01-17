@@ -4,14 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using Backups;
-using Backups.BackupAlgorithm;
-using Backups.JobObject;
-using Backups.RestorePoint;
-using BackupsExtra.CleanerAlgorithm;
-using BackupsExtra.DeleterAlgorithm;
-using BackupsExtra.ExtraBackupJob;
-using BackupsExtra.ExtraRepository;
-using BackupsExtra.Logger;
 
 namespace BackupsExtra
 {
@@ -21,65 +13,64 @@ namespace BackupsExtra
             {
                 var fileOut = new StreamWriter(file, false, Encoding.UTF8);
                 fileOut.WriteLine(backupJob.Name);
-                fileOut.WriteLine(backupJob.Repository.GetDestination().FullName);
+                fileOut.WriteLine(backupJob.Repository.Storage);
                 fileOut.WriteLine("job objects:");
-                foreach (IJobObject<FileInfo> jobObject in backupJob.JobObjects)
+                foreach (string jobObject in backupJob.JobObjects)
                 {
-                    fileOut.WriteLine(jobObject.Get().FullName);
+                    fileOut.WriteLine(jobObject);
                 }
 
-                foreach (IRestorePoint<FileInfo> restorePoint in backupJob.Repository.RestorePoints)
+                foreach (RestorePoint restorePoint in backupJob.RestorePoints)
                 {
                     fileOut.WriteLine("restore point:");
                     fileOut.WriteLine(restorePoint.Name);
-                    fileOut.WriteLine(restorePoint.CreationTime);
-                    foreach (IJobObject<FileInfo> jobObject in restorePoint.JobObjects)
+                    fileOut.WriteLine(restorePoint.DateCreation);
+                    foreach (string jobObject in restorePoint.Files)
                     {
-                        fileOut.WriteLine(jobObject.Get().FullName);
+                        fileOut.WriteLine(jobObject);
                     }
                 }
 
                 fileOut.Close();
             }
 
-            public static FileExtraBackupJob Load(string file)
+            public static BackupJob Load(string file)
             {
                 var fileIn = new StreamReader(file, Encoding.UTF8);
                 string jobName = fileIn.ReadLine();
                 string jobDestination = fileIn.ReadLine();
                 if (fileIn.ReadLine() != "job objects:")
                     throw new InvalidDataException("Invalid file");
-                var jobObjects = new List<IJobObject<FileInfo>>();
+                var jobObjects = new List<string>();
                 string newLine = fileIn.ReadLine();
                 while (newLine != "restore point:")
                 {
-                    jobObjects.Add(new FileJobObject(newLine));
+                    jobObjects.Add(new string(newLine));
                     newLine = fileIn.ReadLine();
                 }
 
-                var restorePoints = new List<IRestorePoint<FileInfo>>();
+                var restorePoints = new List<RestorePoint>();
                 string creationTimeFormat = "dd.MM.yyyy HH:mm:ss";
                 var provider = new CultureInfo("de-DE");
                 while (newLine != null)
                 {
                     string restorePointName = fileIn.ReadLine();
                     string creationTime = fileIn.ReadLine();
-                    var restorePointJobObj = new List<IJobObject<FileInfo>>();
+                    var restorePointJobObj = new List<string>();
                     newLine = fileIn.ReadLine();
                     while (newLine != "restore point:" && newLine != null)
                     {
-                        restorePointJobObj.Add(new FileJobObject(newLine));
+                        restorePointJobObj.Add(new string(newLine));
                         newLine = fileIn.ReadLine();
                     }
 
-                    var newRestorePoint = new FileRestorePoint(restorePointName, restorePointJobObj);
-                    newRestorePoint.CreationTime = DateTime.ParseExact(creationTime, creationTimeFormat, provider);
+                    var newRestorePoint = new RestorePoint(restorePointName, DateTime.ParseExact(creationTime, creationTimeFormat, provider), restorePointJobObj);
                     restorePoints.Add(newRestorePoint);
                 }
 
                 fileIn.Close();
-                var newBackupJob = new FileExtraBackupJob(jobName, new FileExtraRepository(new FileSplitStorages(), new DirectoryInfo(jobDestination), new ByAmountCleaner(5), new RegularDeleter()), new ConsoleLogger(), jobObjects);
-                newBackupJob.Repository.RestorePoints = restorePoints;
+                var repository = new TestRepository();
+                var newBackupJob = new BackupJob(jobName, new SplitStorageAlgorithm(repository), 10, jobObjects, restorePoints);
                 return newBackupJob;
             }
         }

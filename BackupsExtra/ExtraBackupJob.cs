@@ -1,43 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using Backups;
 
-namespace Backups
+namespace BackupsExtra
 {
-    public class BackupJob
+    public class ExtraBackupJob : BackupJob
     {
         private Algorithm _algorithm;
-        public BackupJob(string name, Algorithm algorithm, int maxPointCount, List<string> jobObjects = default, List<RestorePoint> restorePoints = default)
+
+        public ExtraBackupJob(string name, Algorithm algorithm, int maxPointCount, TestLogger logger, List<string> jobObjects = default, List<RestorePoint> restorePoints = default)
+            : base(name, algorithm, maxPointCount, jobObjects, restorePoints)
         {
-            Name = name;
             _algorithm = algorithm;
-            JobObjects = jobObjects ?? new List<string>();
-            RestorePoints = restorePoints ?? new List<RestorePoint>();
             Repository = algorithm.Repository;
             Repository.CreateBackupDir(name);
-            MaxPointCount = maxPointCount;
+            Logger = logger;
+            Logger.Write("BackupJobCreated");
         }
 
-        public List<string> JobObjects { get; private set; } = new List<string>();
-        public IRepository Repository { get; set; }
-        public string Name { get; }
-        public List<RestorePoint> RestorePoints { get; private set; } = new List<RestorePoint>();
-        public int MaxPointCount { get; }
+        public TestLogger Logger { get; }
 
-        public void AddFile(string path)
+        public new void AddFile(string path)
         {
             JobObjects.Add(path);
+            Logger.Write("AddFile");
         }
 
-        public void DeleteFile(string path)
+        public new void DeleteFile(string path)
         {
+            Logger.Write("DeleteFile");
             if (!JobObjects.Contains(path))
                 throw new BackupException("There is no such file");
 
             JobObjects.Remove(path);
         }
 
-        public void Backup()
+        public new void Backup()
         {
+            Logger.Write("Backup");
             DateTime now = DateTime.Now;
             string restorePointName = $"RestorePoint{RestorePoints.Count}_{now.Day}.{now.Month}.{now.Year}";
             var restorePoint = new RestorePoint(restorePointName, now);
@@ -50,7 +50,7 @@ namespace Backups
             }
         }
 
-        public int CountStorages()
+        public new int CountStorages()
         {
             int result = 0;
             RestorePoints.ForEach(rp => result += rp.Files.Count);
