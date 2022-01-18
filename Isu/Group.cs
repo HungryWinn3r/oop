@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Isu.Tools;
 
 namespace Isu
 {
@@ -11,7 +11,7 @@ namespace Isu
         public Group(string name, int limit)
         {
             if (!pattern.IsMatch(name))
-                throw new Exception("bad name");
+                throw new IsuException("bad name");
             Name = name;
             Limit = limit;
             StudentsInGroup = new List<Student>();

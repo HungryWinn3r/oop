@@ -19,7 +19,7 @@ namespace Isu.Tests
         public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent()
         {
             Group group = _isuService.AddGroup("M3206", 15);
-            _isuService.AddStudent("Alex", group, "1");
+            _isuService.AddStudent("Alex", group, "");
             Group foundedGroup = _isuService.FindGroup("M3206");
             Student foundedStudent = _isuService.FindStudent("Alex");
             Assert.Contains(foundedStudent, foundedGroup.StudentsInGroup);
@@ -29,9 +29,9 @@ namespace Isu.Tests
         public void ReachMaxStudentPerGroup_ThrowException()
         {
             Group group = _isuService.AddGroup("M3202", 3);
-            _isuService.AddStudent("Student", group, "2");
-            _isuService.AddStudent("Student", group, "3");
-            _isuService.AddStudent("Student", group, "4");
+            _isuService.AddStudent("Student", group, "");
+            _isuService.AddStudent("Student", group, "");
+            _isuService.AddStudent("Student", group, "");
 
             Assert.Catch<IsuException>(() =>
             {
