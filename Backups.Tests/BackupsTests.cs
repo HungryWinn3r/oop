@@ -16,7 +16,7 @@ namespace Backups.Tests
         public void AddTwoJobs_Run_DeleteOneJob_Run_ResultTwoRestorePointsAndThreeStorages()
         {
             Algorithm algorithm = factory.CreateAlgorithm(AlgorithmType.SPLIT);
-            var backup = new BackupJob("Backup1", algorithm);
+            var backup = new BackupJob("Backup1", algorithm, 10);
             backup.AddFile(@"C:\MyVideo\video1.txt");
             backup.AddFile(@"C:\MyPhoto\photo1.txt");
             backup.Backup();
@@ -34,7 +34,7 @@ namespace Backups.Tests
         public void ChooseSingleStorageAlgorithm_AddTwoJobs_Run_DeleteOneJob_Run_ResultTwoRestorePointAndTwoStorage()
         {
             Algorithm algorithm = factory.CreateAlgorithm(AlgorithmType.SINGLE);
-            var backup = new BackupJob("Backup2", algorithm);
+            var backup = new BackupJob("Backup2", algorithm, 10);
             backup.AddFile(@"C:\MyVideo\video1.txt");
             backup.AddFile(@"C:\MyPhoto\photo1.txt");
             backup.Backup();
