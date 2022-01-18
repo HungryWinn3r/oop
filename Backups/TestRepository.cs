@@ -5,13 +5,14 @@ namespace Backups
 {
     public class TestRepository : IRepository
     {
-        private string _pathToBackup;
         public TestRepository() { }
 
         public List<string> RestorePoints { get; private set; } = new List<string>();
+
+        public string Storage { get; private set; }
         public void CreateBackupDir(string backupName)
         {
-            _pathToBackup = backupName;
+            Storage = backupName;
         }
 
         public void CreateRestorePointDir(string restorePointName)
@@ -22,12 +23,12 @@ namespace Backups
         public string CompressFile(string sourceFile, string restorePointDirName)
         {
             var fileInfo = new FileInfo(sourceFile);
-            return Path.ChangeExtension(_pathToBackup + $@"\{restorePointDirName}\{fileInfo.Name}", "zip");
+            return Path.ChangeExtension(Storage + $@"\{restorePointDirName}\{fileInfo.Name}", "zip");
         }
 
         public string CreateArchive(List<string> sourceFiles, string restorePointDirName)
         {
-            string zipFile = _pathToBackup + $@"\{restorePointDirName}\copies.zip";
+            string zipFile = Storage + $@"\{restorePointDirName}\copies.zip";
             return zipFile;
         }
     }
